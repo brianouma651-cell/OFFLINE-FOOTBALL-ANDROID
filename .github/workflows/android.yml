@@ -11,6 +11,7 @@ permissions:
 jobs:
   validate-and-export:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -45,13 +46,19 @@ jobs:
           set -euo pipefail
           SDK_ROOT="$RUNNER_TEMP/android-sdk"
           mkdir -p "$SDK_ROOT/cmdline-tools/latest"
+
           curl -fsSL --retry 3 \
             https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip \
             -o "$RUNNER_TEMP/android-tools.zip"
+
           mkdir -p "$RUNNER_TEMP/android-tools-unpacked"
           unzip -q "$RUNNER_TEMP/android-tools.zip" -d "$RUNNER_TEMP/android-tools-unpacked"
+
           test -x "$RUNNER_TEMP/android-tools-unpacked/cmdline-tools/bin/sdkmanager"
-          cp -R "$RUNNER_TEMP/android-tools-unpacked/cmdline-tools/." "$SDK_ROOT/cmdline-tools/latest/"
+
+          cp -R "$RUNNER_TEMP/android-tools-unpacked/cmdline-tools/." \
+            "$SDK_ROOT/cmdline-tools/latest/"
+
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
@@ -64,6 +71,7 @@ jobs:
           yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
           sdk_status=${PIPESTATUS[1]}
           set -e
+
           if [ "$sdk_status" -ne 0 ]; then
             echo 'Android SDK licence acceptance failed.'
             exit "$sdk_status"
@@ -84,28 +92,38 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/godot" "$HOME/.local/share/godot/export_templates/4.3.stable"
+          mkdir -p "$RUNNER_TEMP/godot" \
+            "$HOME/.local/share/godot/export_templates/4.3.stable"
+
           curl -fsSL --retry 3 \
             https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip \
             -o "$RUNNER_TEMP/godot/godot.zip"
+
           unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+
           GODOT_BIN="$RUNNER_TEMP/godot/Godot_v4.3-stable_linux.x86_64"
           test -f "$GODOT_BIN"
           chmod +x "$GODOT_BIN"
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+
           curl -fsSL --retry 3 \
             https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz \
             -o "$RUNNER_TEMP/godot/templates.tpz"
+
           mkdir -p "$RUNNER_TEMP/godot/templates"
           unzip -q "$RUNNER_TEMP/godot/templates.tpz" -d "$RUNNER_TEMP/godot/templates"
-          cp -R "$RUNNER_TEMP/godot/templates/templates/." "$HOME/.local/share/godot/export_templates/4.3.stable/"
+
+          cp -R "$RUNNER_TEMP/godot/templates/templates/." \
+            "$HOME/.local/share/godot/export_templates/4.3.stable/"
 
       - name: Configure Godot Android SDK paths
         shell: bash
         run: |
           mkdir -p "$HOME/.config/godot"
+
           cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
+
           [resource]
           export/android/android_sdk_path = "$ANDROID_HOME"
           export/android/java_sdk_path = "$JAVA_HOME"
@@ -118,12 +136,35 @@ jobs:
           "$GODOT_BIN" --headless --editor --path . --quit
           "$GODOT_BIN" --headless --path . --quit-after 5
 
-      - name: Export Android debug APK
+      - name: Diagnose and export Android debug APK
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build
-          "$GODOT_BIN" --headless --path . --export-debug 'Android' build/OfflineFootball-debug.apk
+
+          echo "=== Godot version ==="
+          "$GODOT_BIN" --version
+
+          echo "=== Android SDK ==="
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls -la "$ANDROID_HOME"
+
+          echo "=== Java ==="
+          java -version
+
+          echo "=== Android export diagnostics ==="
+          set +e
+          "$GODOT_BIN" --headless --verbose --path . \
+            --export-debug 'Android' build/OfflineFootball-debug.apk \
+            2>&1 | tee build/android-export-diagnostics.log
+          export_status=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$export_status" -ne 0 ]; then
+            echo "Godot Android export failed with exit code $export_status"
+            exit "$export_status"
+          fi
+
           test -s build/OfflineFootball-debug.apk
           echo 'ANDROID APK EXPORT PASSED'
 
