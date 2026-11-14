@@ -1,4 +1,5 @@
-__pycache__/
-*.pyc
 .godot/
+__pycache__/
+*.py[cod]
 build/*.apk
+*.log

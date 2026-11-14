@@ -1,8 +1,8 @@
 @echo off
 setlocal
-set "ROOT=%~dp0OFFLINE_FOOTBALL_GODOT"
+set "ROOT=%~dp0"
 if not exist "%ROOT%\project.godot" (
-  echo ERROR: Could not find OFFLINE_FOOTBALL_GODOT beside this script.
+  echo ERROR: Could not find project.godot beside this script.
   pause
   exit /b 1
 )

@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set "PROJECT=%~dp0OFFLINE_FOOTBALL_GODOT"
+set "PROJECT=%~dp0"
 set "APK=%PROJECT%\build\OfflineFootball-debug.apk"
 set "GODOT_EXE=%GODOT_EXE%"
 if not defined GODOT_EXE (
