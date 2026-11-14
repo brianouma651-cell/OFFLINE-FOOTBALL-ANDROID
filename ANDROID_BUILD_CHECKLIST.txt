@@ -1,0 +1,48 @@
+ANDROID BUILD CHECKLIST – OFFLINE FOOTBALL
+
+[ ] Install Godot 4.3+.
+[ ] Install matching Godot export templates.
+[ ] Install Android Studio and Android SDK.
+[ ] Configure Android SDK and Java SDK paths in Godot Editor Settings.
+[ ] Add Android export preset and unique application/package ID.
+[ ] Configure release signing credentials securely (do not put passwords in the project ZIP).
+[ ] Export a debug APK.
+[ ] Install on a physical Android phone.
+[ ] Test landscape orientation and every touch control.
+[ ] Test match pause/resume and verify ball physics/timer truly stop while paused.
+[ ] Test career save/load and custom club name after closing/reopening the app.
+[ ] Test exhibition and career matches with airplane mode enabled.
+[ ] Profile performance on the target phone and fix any parser/runtime errors.
+[ ] Only then create and verify the release APK.
+
+Stage 12 additional checks:
+- [ ] Cycle through all four club presets and confirm league points are preserved.
+- [ ] Save a custom club name and confirm it persists after restarting the app.
+- [ ] Cycle all four home kit colours and confirm they persist after restarting.
+- [ ] Confirm opponent kit colours change for Red City, Coastal Rovers, and Highland FC.
+- [ ] Test camera zoom controls during a match and confirm camera bounds remain stable.
+- [ ] Test UI layout and touch targets on a physical Android device in landscape.
+
+Stage 13 tactical checks:
+- [ ] In Club Management, cycle Balanced → Attacking → Defensive → Balanced.
+- [ ] Close/reopen the game and confirm the selected tactic persists.
+- [ ] Start a match in each tactic and compare teammate support positions.
+- [ ] Observe opposition build-up, forward carrying, and shots near the home goal.
+- [ ] Confirm the event feed records opposition attacks without freezing the match.
+- [ ] Confirm older career_save.json files load with Balanced as the default tactic.
+
+Stage 20 focused-training checks:
+- [ ] Cycle through Balanced, Fitness, Attacking, Passing, Defending, and Goalkeeping training focuses.
+- [ ] Confirm specialist training improves only the intended attribute and respects the 99 cap.
+- [ ] Confirm Fitness training restores squad fitness without exceeding 100.
+- [ ] Confirm the selected training focus survives closing and reopening the game.
+- [ ] Confirm older career saves load with Balanced training selected.
+
+
+Stage 24 league checks:
+- [ ] Confirm the six rounds contain one home and one away match against each rival.
+- [ ] Confirm match results show the right home/away order for return-leg fixtures.
+- [ ] Confirm the other matchday fixture is simulated and both clubs' league records update.
+- [ ] Confirm the league table ranks points first and goal difference second.
+- [ ] Complete six career matches and confirm the next season starts with a clean league table.
+- [ ] Confirm fixtures, results and league records persist after closing and reopening the game.

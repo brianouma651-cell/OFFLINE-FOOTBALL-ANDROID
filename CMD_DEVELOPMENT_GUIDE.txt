@@ -1,0 +1,50 @@
+OFFLINE FOOTBALL — WINDOWS CMD DEVELOPMENT GUIDE
+================================================
+
+PROJECT
+-------
+Open OFFLINE_FOOTBALL_GODOT\project.godot with Godot 4.3 or later.
+The project is configured for landscape orientation and uses the GL Compatibility renderer.
+
+REQUIREMENTS FOR ANDROID BUILD
+------------------------------
+1. Godot 4.3+ desktop editor.
+2. Matching export templates installed for that exact Godot version.
+3. Android SDK command-line/build tools and platform tools.
+4. A supported Java JDK configured in Godot Editor Settings.
+5. Android SDK and Java SDK paths configured in Editor Settings > Export > Android.
+
+COMMANDS
+--------
+A) Verify source-level regression tests:
+   Double-click VERIFY_SOURCE.cmd
+   or run it from CMD in this folder.
+
+B) Open the Godot project:
+   Double-click OPEN_GODOT_EDITOR.cmd
+
+C) Build a debug APK:
+   Double-click BUILD_ANDROID_DEBUG.cmd
+   Output: OFFLINE_FOOTBALL_GODOT\build\OfflineFootball-debug.apk
+
+OPTIONAL PATH CONFIGURATION
+---------------------------
+If Godot is not on PATH, set GODOT_EXE to the full path of godot.exe before
+running the CMD script. Example:
+   set GODOT_EXE=C:\Godot\Godot_v4.3-stable_win64.exe
+
+Set ANDROID_HOME or ANDROID_SDK_ROOT and JAVA_HOME if your tools require them.
+The SDK/JDK locations must also be configured in Godot Editor Settings.
+
+IMPORTANT LIMITATIONS
+---------------------
+- VERIFY_SOURCE.cmd runs Python source-regression checks only.
+- BUILD_ANDROID_DEBUG.cmd performs a Godot import/parse attempt, a short headless
+  startup attempt, and then asks Godot to export the Android debug APK.
+- The build has not been run in this packaging environment because Godot and the
+  Android build toolchain are not installed here.
+- The debug APK is for installation/testing. A signed release APK/AAB requires
+  release signing configuration and must be tested separately.
+- A real Android phone test is still required: controls, match flow, saves,
+  offline operation, display, and performance.
+- No online service, account, server, or paid hosting is required by this project.

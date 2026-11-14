@@ -1,0 +1,7 @@
+GITHUB ACTIONS ANDROID BUILD
+
+This project includes .github/workflows/android.yml. Push the repository's main branch to trigger a GitHub Actions Android debug build, or run the workflow manually from the Actions tab.
+
+The workflow installs Java 17, Android SDK components, Godot 4.3 stable and its matching Android export templates; runs the Python source test suites; imports the Godot project; and attempts to export build/OfflineFootball-debug.apk. On success, download the artifact named Offline-Football-Android-debug-APK.
+
+Important: a successful source test run does not prove gameplay correctness. The APK must still be installed and tested on a real Android device. The workflow itself has not yet been executed in this repository.
